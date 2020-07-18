@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 
+// main search/landing page
 Route::get('/', 'SearchController@index');
+
+Route::get('/import', 'ImportDataController@index');
