@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\ImportHistory;
-use App\DataSource;
+use Illuminate\Support\Facades\DB;
 
 class ImportDataController extends Controller
 {
@@ -16,8 +15,13 @@ class ImportDataController extends Controller
      */
     public function index(Request $request)
     {
-        $dataSources = DataSource::all();
-        $imports = ImportHistory::all();
+        $dataSources = DB::table('data_sources')
+            ->get();
+        
+        $imports = DB::table('import_history')
+            ->select('import_history.created_at','data_sources.name','data_sources.url')
+            ->join('data_sources','import_history.data_sources_id','=','data_sources.id')
+            ->get();
 
         return view('pages.import.index',[
             'dataSources' => $dataSources,
