@@ -16,6 +16,8 @@ class CreateImportHistoryTable extends Migration
         Schema::create('import_history', function (Blueprint $table) {
             $table->id();
             $table->integer('data_sources_id');
+            $table->integer('offset'); // starting place to send GET request for data
+            $table->integer('limit');  // number of reccords to retrieve
             $table->timestamps();
         });
     }

@@ -19,3 +19,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'SearchController@index');
 
 Route::get('/import', 'ImportDataController@index');
+
+Route::post('/import/{dataSourceId}', 'ImportDataController@import');

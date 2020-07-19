@@ -11,14 +11,19 @@
                 <thead>
                     <th>Name</th>
                     <th>URL</th>
-                    <th>Status</th>
+                    <th></th>
                 </thead>
                 <tbody>
                 @foreach($dataSources as $data)
                 <tr>
                     <td>{{$data->name}}</td>
                     <td>{{$data->url}}</td>
-                    <td>Status</td>
+                    <td>
+                        <form method="POST" action="/import/{{ $data->id }}">
+                        @csrf
+                        <button>Update</submit>
+                        </form>
+                    </td>
                 </tr>
                 @endforeach
                 </tbody>
@@ -35,7 +40,7 @@
 
     <!-- import history table -->
     <div>
-        <h2 class="text-center">Imported Data</h2>
+        <h2 class="text-center">Import History</h2>
         @if (count($imports) > 0)
         <div>
             <h2 class="text-center"></h2>

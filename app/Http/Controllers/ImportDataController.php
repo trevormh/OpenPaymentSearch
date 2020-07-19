@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use App\DataSource;
 
 class ImportDataController extends Controller
 {
+    use \App\Traits\RetrieveDataTrait;
+    use \App\Traits\SaveImportDataTrait;
+
     /**
      * Handle the incoming request.
      *
@@ -27,6 +32,24 @@ class ImportDataController extends Controller
             'dataSources' => $dataSources,
             'imports' => $imports
         ]);
+    }
+
+    
+    /*
+    * Endpoint to import data
+    */
+    public function import(Request $request, $dataSourceId)
+    {
+        $request->merge(['id' => $dataSourceId]);
+        $validator = Validator::make($request->all(),[
+            'id' => 'integer|exists:data_sources,id'
+        ]);
+
+        $data = $this->retrieveData($dataSourceId);
+        
+        $this->saveImportedData($data);
+
+        return redirect('/import');
     }
 
 }
