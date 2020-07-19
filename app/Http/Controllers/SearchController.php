@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\GeneralPaymentData;
 use Illuminate\Support\Facades\DB;
 use Log;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class SearchController extends Controller
 {
@@ -32,7 +33,8 @@ class SearchController extends Controller
 
         return view('pages.search.index',[
             'enableSearch' => !empty($paymentCount) ? true : false,
-            'results' => $results
+            'results' => $results,
+            'request_params' => json_encode($request->all(),true)
         ]);
     }
 
@@ -49,5 +51,23 @@ class SearchController extends Controller
 
             return response()->json($result);
     }
+
+    private function exportGenerator($params) {
+        $payments = GeneralPaymentData::where($params->field, 'LIKE', '%'. $params->q. '%')->cursor();
+        foreach ($payments as $payment) {
+            yield $payment;
+        }
+    }
+
+
+    public function export(Request $request)
+    {
+        if ($request->has('request_params')) {
+            $params = json_decode($request->get('request_params'));
+            return (new FastExcel($this->exportGenerator($params)))->download('export.xlsx');
+        } else {
+            return back();
+        }
+    } 
 
 }

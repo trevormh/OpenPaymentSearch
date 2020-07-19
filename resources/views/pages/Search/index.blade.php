@@ -7,6 +7,11 @@
         <div>
             @if (count($results) > 0)
                 <h2 class="text-center">Search Results</h2>
+                <form method="POST" type="submit" action="/search/export" download="export.xls">
+                    @csrf
+                    <input type="hidden" name="request_params" value="{{ $request_params}}"></input>
+                    <button>Export XLS</button>
+                </form>
                 <div>
                     <h2 class="text-center"></h2>
                     <table class="table">
