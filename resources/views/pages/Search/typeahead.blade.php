@@ -8,7 +8,7 @@
     <form class="typeahead" role="search">
         <div class="form-group">
             <label for="search_params">Field:</label>
-            <select name="search_params" id = "search_param">
+            <select name="search_params" id = "search_field">
                 <option value ="physician_first_name">Physician First Name</option>
                 <option value ="physician_last_name">Physician Last Name</option>
                 <option value ="total_amount_of_payment_usdollars">Amount</option>
@@ -21,12 +21,12 @@
 <script>
         jQuery(document).ready(function($) {
 
-            var searchparam = document.getElementById("search_param").value;
+            var searchField = document.getElementById("search_field").value;
 
             // Set the Options for "Bloodhound" suggestion engine
             var engine = new Bloodhound({
                 remote: {
-                    url: '/search?field=' + searchparam + '&q=%QUERY%',
+                    url: '/search?field=' + searchField + '&q=%QUERY%',
                     wildcard: '%QUERY%'
                 },
                 datumTokenizer: Bloodhound.tokenizers.whitespace('q'),
@@ -52,8 +52,7 @@
                         '<div class="list-group search-results-dropdown">'
                     ],
                     suggestion: function (data) {
-                        console.log(data);
-                        return '<a href=/"' + data[searchparam] + '" class="list-group-item">' +  data[searchparam] + '</a>'
+                        return '<a href=/?field=' + searchField + '&q=' + data[searchField] + ' class="list-group-item">' +  data[searchField] + '</a>'
               }
                 }
             });

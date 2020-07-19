@@ -25,7 +25,7 @@ class SearchController extends Controller
             $field = $request->get('field');
             $search = $request->get('q');
             $results = GeneralPaymentData::where($field, 'LIKE', '%'. $search. '%')
-                ->paginate(50);
+                ->paginate(20);
         } else {
             $results = [];
         }
