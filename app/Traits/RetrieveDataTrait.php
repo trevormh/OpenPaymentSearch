@@ -18,7 +18,6 @@ trait RetrieveDataTrait
         $app_token = env('datasource_app_token');
 
         return $this->sendRequest($url,$import_params, $app_token);
-        
     }
 
 

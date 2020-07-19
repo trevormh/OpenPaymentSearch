@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class InitialDataImport extends Command
+class ImportFromApi extends Command
 {
     use \App\Traits\RetrieveDataTrait;
     use \App\Traits\SaveImportDataTrait;
@@ -16,7 +16,7 @@ class InitialDataImport extends Command
      *
      * @var string
      */
-    protected $signature = 'data:initialimport {dataSourceId}';
+    protected $signature = 'import:fromapi {dataSourceId}';
 
     /**
      * The console command description.
@@ -48,14 +48,14 @@ class InitialDataImport extends Command
             ->count();
         
         if ($paymentCount == 0) {
-            $this->startFirstImport();
+            $this->startApiImport();
         } else {
             $this->info('Database already contains records. Please truncate general_payment_data and import_history tables to continue');
         }
     }
 
 
-    private function startFirstImport() 
+    private function startApiImport() 
     {
         $dataSourceId = $this->argument('dataSourceId');
         $this->info('Initial import of data_sources.id ' . $dataSourceId  . ' starting at: ' . Carbon::now());
