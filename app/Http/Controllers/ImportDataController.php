@@ -24,8 +24,9 @@ class ImportDataController extends Controller
             ->get();
         
         $imports = DB::table('import_history')
-            ->select('import_history.created_at','data_sources.name','data_sources.url')
+            ->select('import_history.id','import_history.limit','import_history.offset','import_history.created_at','data_sources.name','data_sources.url')
             ->join('data_sources','import_history.data_sources_id','=','data_sources.id')
+            ->orderByDesc('import_history.id')
             ->get();
 
         return view('pages.import.index',[
@@ -46,8 +47,8 @@ class ImportDataController extends Controller
         ]);
 
         $data = $this->retrieveData($dataSourceId);
-        
-        $this->saveImportedData($data);
+
+        $this->saveImportedData($dataSourceId,$data);
 
         return redirect('/import');
     }

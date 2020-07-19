@@ -19,22 +19,26 @@ trait RetrieveDataTrait
 
         $app_token = env('datasource_app_token');
 
-        return $this->sendRequest($url,$import_params['limit'], $import_params['offset'], $app_token);
+        return $this->sendRequest($url,$import_params, $app_token);
         
     }
 
 
-    private function getImportParams($dataSourceId)
+    /*
+    * Returns import params that will be made on a call
+    */
+    public function getImportParams($dataSourceId)
     {
         // need to look up the URL to retrieve data from
         $importHistory = DB::table('import_history')
-            ->where('id',$dataSourceId)
+            ->where('data_sources_id',$dataSourceId)
+            ->latest()
             ->first();
-        
+            
         if (empty($importHistory)) {
             $offset = 0;
         } else {
-            $offset = $importHistory->offset + 1;
+            $offset = $importHistory->offset + $importHistory->limit + 1;
         }
 
         return [
@@ -44,7 +48,7 @@ trait RetrieveDataTrait
     }
 
 
-    private function getRequestUrl($dataSourceId)
+    public function getRequestUrl($dataSourceId)
     {
         // need to look up the URL to retrieve data from
         $dataSource = DB::table('data_sources')
@@ -62,10 +66,10 @@ trait RetrieveDataTrait
     * Sends GET request to retrieve json payload
     * @response array
     */
-    public function sendRequest($url, $limit, $offset, $token) 
+    private function sendRequest($url, $importParams, $token) 
     {
-        $limit = urlencode("$") . "limit=" . strval($limit);   
-        $offset = urlencode("$") . "offset=" . strval($offset);
+        $limit = urlencode("$") . "limit=" . strval($importParams['limit']);   
+        $offset = urlencode("$") . "offset=" . strval($importParams['offset']);
         $app_token = urlencode("$$") . "app_token=" . $token;
 
         $url .=  $limit . "&" . $offset . "&" . $app_token;

@@ -46,13 +46,19 @@
             <h2 class="text-center"></h2>
             <table class="table">
                 <thead>
-                    <th>Data Set Name</th>
+                    <th>ID</th>
+                    <th>Data Set</th>
+                    <th>Offset</th>
+                    <th>Limit</th>
                     <th>Import Datetime</th>
                 </thead>
                 <tbody>
                 @foreach($imports as $import)
                 <tr>
+                    <td>{{$import->id}}</td>
                     <td>{{$import->name}}</td>
+                    <td>{{$import->offset}}</td>
+                    <td>{{$import->limit}}</td>
                     <td>{{$import->created_at}}</td>
                 </tr>
                 @endforeach
