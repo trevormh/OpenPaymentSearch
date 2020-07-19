@@ -64,6 +64,7 @@
                 @endforeach
                 </tbody>
             </table>
+            {{ $imports->links() }}
         </div>
         @else
             No data has been imported

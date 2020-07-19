@@ -13,10 +13,8 @@ trait RetrieveDataTrait
     */
     public function retrieveData($dataSourceId)
     {
-        $import_params = $this->getImportParams($dataSourceId); // first determine what params need to be sent (limit & offset)
-        
+        $import_params = $this->getImportParams($dataSourceId);
         $url = $this->getRequestUrl($dataSourceId);
-
         $app_token = env('datasource_app_token');
 
         return $this->sendRequest($url,$import_params, $app_token);
@@ -34,7 +32,7 @@ trait RetrieveDataTrait
             ->where('data_sources_id',$dataSourceId)
             ->latest()
             ->first();
-            
+
         if (empty($importHistory)) {
             $offset = 0;
         } else {

@@ -10,8 +10,4 @@ class GeneralPaymentData extends Model
 
     public $timestamps = true;
 
-    protected $dispatchesEvents = [
-        'saving' => UserSaved::class,
-        'updating' => UserDeleted::class,
-    ];
 }

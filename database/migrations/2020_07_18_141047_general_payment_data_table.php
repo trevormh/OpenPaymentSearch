@@ -45,7 +45,7 @@ class GeneralPaymentDataTable extends Migration
             $table->longtext("applicable_manufacturer_or_applicable_gpo_making_payment_name")->nullable();
             $table->longtext("applicable_manufacturer_or_applicable_gpo_making_payment_state")->nullable();
             $table->longtext("applicable_manufacturer_or_applicable_gpo_making_payment_country")->nullable();
-            $table->decimal("total_amount_of_payment_usdollars",8,2)->nullable(); // number data type: https://dev.socrata.com/docs/datatypes/number.html#2.1
+            $table->decimal("total_amount_of_payment_usdollars",10,2)->nullable(); // number data type: https://dev.socrata.com/docs/datatypes/number.html#2.1
             $table->datetime("date_of_payment",0)->nullable(); // floating timestamp data type : https://dev.socrata.com/docs/datatypes/floatingtimestamp.html#2.1
             $table->decimal("number_of_payments_included_in_total_amount",8,2)->nullable(); // number data type: https://dev.socrata.com/docs/datatypes/number.html#2.1
             $table->longtext("form_of_payment_or_transfer_of_value")->nullable();

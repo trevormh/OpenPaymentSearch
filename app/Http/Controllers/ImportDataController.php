@@ -23,11 +23,12 @@ class ImportDataController extends Controller
         $dataSources = DB::table('data_sources')
             ->get();
         
+        // history of imported data
         $imports = DB::table('import_history')
             ->select('import_history.id','import_history.limit','import_history.offset','import_history.created_at','data_sources.name','data_sources.url')
             ->join('data_sources','import_history.data_sources_id','=','data_sources.id')
             ->orderByDesc('import_history.id')
-            ->get();
+            ->paginate(25);
 
         return view('pages.import.index',[
             'dataSources' => $dataSources,

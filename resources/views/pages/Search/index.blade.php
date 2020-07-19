@@ -1,7 +1,9 @@
 @extends('layouts.default')
 @section('content')
     @if ($enableSearch == true)
-        Search enabled
+    <div>
+        @include('pages.search.typeahead')
+    </div>
     @else
         No data has been loaded
     @endif

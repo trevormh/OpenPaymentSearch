@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 // main search/landing page
 Route::get('/', 'SearchController@index');
 
+Route::get('/search', 'SearchController@search');
+
 Route::get('/import', 'ImportDataController@index');
 
 Route::post('/import/{dataSourceId}', 'ImportDataController@import');

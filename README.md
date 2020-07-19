@@ -12,4 +12,5 @@ php artisan db:seed --class=DataSourcesSeeder
 
 php artisan serve
 
+php artisan 
 
