@@ -87,7 +87,7 @@ class SearchController extends Controller
     */
     public function export(Request $request)
     {
-        $request->merge(['request_params' => $request->get('validation_params')]);
+        $request->merge(['request_params' => $request->get('request_params')]);
         $validator = Validator::make($request->all(),[
             'request_params' => 'required'
         ]);
