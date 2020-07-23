@@ -22,7 +22,7 @@ class ImportFromApi extends Command
      *
      * @var string
      */
-    protected $signature = 'import:fromapi {--dataSourceId=}';
+    protected $signature = 'Import:FromApi {--dataSourceId=}';
 
     /**
      * The console command description.

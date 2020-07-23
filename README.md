@@ -62,7 +62,7 @@ Open the 'initial_data_import.sql' file located in the sql_scripts directory ('s
 `php artisan UpdateDb:AddIndexes`
 
 Finally, enter the following command to indicate to the app that data has been loaded:  
-`php artisan import:updatehistory`
+`php artisan UpdateDb:UpdateImportHistory`
 
 ### **Import Option 2 - Importing with Laravel Artisan command**
 
@@ -71,21 +71,21 @@ First download the CSV. To download the dataset please vist [this link](https://
 **Note: If you would like to import without specifying a filepath it must be located in the 'storage/import_data' directory and named 'General_Payment_Data___Detailed_Dataset_2019_Reporting_Year.csv'**
 
 To import with specifying a filepath:  
-`php artisan import:fromfile --filepath='/path/to/file.csv'`
+`php artisan Import:FromFile --filepath='/path/to/file.csv'`
 
 To import from the default location:
-`php artisan import:fromfile`
+`php artisan Import:FromFile`
 
 ### **Import Option 3 - Importing with API calls** 
 
 API calls can be used to import the entire dataset, but this method is primarily intended to be used for fetching additional data once the initial import is completed as it is the slowest of the 3 data importing methods. To run use this option to import data, enter the followin command
 
-`php artisan import:fromapi`
+`php artisan Import:FromApi`
 
 ___
 ## Fetching New Data
 
 To fetch new data run the following command from the root directory:  
-`php artisan import:fromapi`
+`php artisan Import:FromApi`
 
 In a production environment this would be set up as a Laravel Scheduled job triggered by a cron. Because the process may be time consuming, in order to access manual updates by users without command line access, a form submission by a user could create a scheduled job with a service such as RabbitMQ worker.

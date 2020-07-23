@@ -19,7 +19,7 @@ class ImportFromFile extends Command
      *
      * @var string
      */
-    protected $signature = 'import:fromfile {--filepath=}';
+    protected $signature = 'Import:FromFile {--filepath=}';
 
     /**
      * The console command description.
