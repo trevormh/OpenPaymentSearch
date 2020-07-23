@@ -6,6 +6,7 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal;
 use App\Transformers\ImportDataTransformer;
+use Illuminate\Support\Str;
 
 /**
  * Trait to facilitate misc. data manipulation
@@ -54,6 +55,46 @@ trait DataModiferTrait
             'offset' => $offset,
             'limit' => env('REQUEST_LIMIT')
         ];
+    }
+
+    
+
+    protected function mapQueryToField($query, $payments)
+    {
+        $indexedFields = [
+            'physician_first_name',
+            'physician_last_name',
+            'submitting_applicable_manufacturer_or_applicable_gpo_name',
+            'recipient_state',
+            'recipient_city'
+        ];
+
+
+        $fields = [];
+        // loop through each row and find which field is the closest match
+        foreach ($payments as $payment)
+        {
+            foreach ($payment as $key => $v) {
+                if (!in_array($key, $indexedFields)) {
+                    continue;
+                }
+                if(strpos(strtolower($v), strtolower($query)) !== false){
+                    $field = $key;
+                    $value = $v;
+                    $fields[Str::title($value)] = $key; // set value to the index so we'll only have unique values to choose from
+                }
+            }
+        }
+
+        $map = function($value, $key) {
+            return [
+                'field' => $key,
+                'value' => $value
+            ];
+        };
+        $mappedFields = array_map($map,array_keys($fields),$fields);
+
+        return $mappedFields;
     }
 
 }

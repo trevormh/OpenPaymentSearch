@@ -1,6 +1,4 @@
-<!doctype html>
-<html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -14,5 +12,5 @@
 
 
     <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/examples/sticky-footer-navbar/sticky-footer-navbar.css" crossorigin="anonymous">
-    
-  </head>
+
+</head>

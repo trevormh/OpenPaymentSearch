@@ -11,6 +11,8 @@ use Validator;
 
 class SearchController extends Controller
 {
+    use \App\Traits\DataModiferTrait;
+
     /**
      * Handle the incoming request.
      *
@@ -46,15 +48,36 @@ class SearchController extends Controller
     public function typeaheadSearch(Request $request)
     {
         Log::info('searching...');
-        $field = $request->get('field');
-        $search = $request->get('q');
-        $result = GeneralPaymentData::select($field)
-            ->where($field, 'LIKE', '%'. $search. '%')
-            ->groupBy($field)
-            ->limit(10)
-            ->get();
 
-            return response()->json($result);
+        $field = $request->get('field');
+        $query = $request->get('q');
+
+        $request->merge([
+            'field' => $field,
+            'query' => $query
+        ]);
+        $validator = Validator::make($request->all(),[
+            'query' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failure',
+                'message' => 'param q must be provided'
+            ]);
+        }
+        $payments = GeneralPaymentData::where('physician_first_name', 'LIKE', $query. '%')
+            ->orWhere('physician_last_name', 'LIKE', $query. '%')
+            ->orWhere('submitting_applicable_manufacturer_or_applicable_gpo_name', 'LIKE', $query. '%')
+            ->orWhere('recipient_state', 'LIKE', $query. '%')
+            ->orWhere('recipient_city', 'LIKE', $query. '%')
+            ->distinct()
+            ->limit(10)
+            ->get()
+            ->toArray();
+                
+        $result = $this->mapQueryToField($query, $payments);
+
+        return response()->json($result);
     }
 
 

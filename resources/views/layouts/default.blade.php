@@ -1,8 +1,6 @@
 <!doctype html>
 <html>
-    <head>
         @include('includes.head')
-    </head>
 
     <body>
         <div role="main" class="container">
@@ -18,13 +16,11 @@
 
                 @yield('content')
             </main>
-
-
-            <footer class="row">
-                @include('includes.footer')
-            </footer>
-
         </div> <!-- closing of container -->
+
+        <footer>
+            @include('includes.footer')
+        </footer>
 
     </body>
 
