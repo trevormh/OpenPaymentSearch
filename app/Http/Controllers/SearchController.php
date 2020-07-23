@@ -59,8 +59,8 @@ class SearchController extends Controller
 
 
     /**
-    * @param  \Illuminate\Http\Request  $request
-    * 
+     * Exports search results to xls file
+     * @param  \Illuminate\Http\Request  $request
     */
     public function export(Request $request)
     {
@@ -69,15 +69,11 @@ class SearchController extends Controller
             'request_params' => 'required'
         ]);
         if ($validator->fails()) {
-            return back();
+            return redirect('/');
         }
 
-        // if ($request->has('request_params')) {
         $params = json_decode($request->get('request_params'));
         return (new FastExcel($this->exportGenerator($params)))->download('export.xlsx');
-        // } else {
-        //     return back();
-        // }
     }
 
     private function exportGenerator($params) {
@@ -90,6 +86,12 @@ class SearchController extends Controller
     }
 
 
+    /**
+     * View a single record
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param integer  $generalPaymentDataId
+    */
     public function view(Request $request, $generalPaymentDataId)
     {
         $request->merge(['gpd_id' => $generalPaymentDataId]);
@@ -97,7 +99,7 @@ class SearchController extends Controller
             'gpd_id' => 'required|exists:general_payment_data,id'
         ]);
         if ($validator->fails()) {
-            return back();
+            return redirect('/');
         }
 
         $payment = GeneralPaymentData::where('id', $generalPaymentDataId)

@@ -19,16 +19,14 @@
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Amount</th>
-                            <th>Date</th>
                         </thead>
                         <tbody>
                         @foreach($results as $result)
                         <tr>
-                            <td>{{$result->id}}</td>
+                            <td><a href="search/view/{{ $result->id }}">{{ $result->id }}</a></td>
                             <td>{{$result->physician_first_name}}</td>
                             <td>{{$result->physician_last_name}}</td>
                             <td>{{$result->total_amount_of_payment_usdollars}}</td>
-                            <td>{{$result->date_of_payment}}</td>
                         </tr>
                         @endforeach
                         </tbody>

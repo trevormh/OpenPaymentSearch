@@ -12,6 +12,8 @@
                 <option value ="physician_first_name">Physician First Name</option>
                 <option value ="physician_last_name">Physician Last Name</option>
                 <option value ="total_amount_of_payment_usdollars">Amount</option>
+                <option value ="recipient_city">City</option>
+                <option value ="recipient_state">State</option>
             </select>
             <input type="search" name="q" class="form-control search-input" placeholder="Search" autocomplete="off">
             <button type= "submit">Submit</button>
@@ -21,28 +23,21 @@
 
 <script>
         
+        
         var searchField = $('#field').val();
-        // $('#field').change(function() {
-        //     searchField = $(this).val());
-        // };
-
         jQuery(document).ready(function($) {
 
             // Set the Options for "Bloodhound" suggestion engine
             var engine = new Bloodhound({
                 remote: {
-                    // url: '/typeaheadSearch?field=' + searchField + '&q=%QUERY%',
-                    // url: '/typeaheadSearch?q=%QUERY%',
-                    // wildcard: '%QUERY%'
                     url: '/typeaheadSearch',
                     prepare : function(query, settings) {
                         settings.url += '?q=' + query;
-                        // return settings;
                         settings.url += "&field=" + $('#field').val();
                         return settings;
                     }
                 },
-                datumTokenizer: Bloodhound.tokenizers.whitespace('q'),
+                datumTokenizer: Bloodhound.tokenizers.whitespace(),
                 queryTokenizer: Bloodhound.tokenizers.whitespace
             });
 
@@ -54,16 +49,15 @@
                 source: engine.ttAdapter(),
                 display: searchField, 
 
-
                 templates: {
-                    
                     header: [
                         '<div class="list-group search-results-dropdown">'
                     ],
                     suggestion: function (data) {
                         let fieldName = $('#field').val()
-                        return '<a href=/?field=' + fieldName + '&q=' + data[fieldName] + ' class="list-group-item">' +  data[fieldName] + '</a>'
-              }
+                        let encodedResult = encodeURI(data[fieldName])
+                        return '<a href=/?field=' + fieldName + '&q=' + encodedResult + ' class="list-group-item">' +  data[fieldName] + '</a>'
+                    }
                 }
             });
         });
