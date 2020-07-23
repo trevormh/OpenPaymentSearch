@@ -15,20 +15,20 @@ class GeneralPaymentDataTable extends Migration
     {
         Schema::create('general_payment_data', function (Blueprint $table) {
             $table->id();
-            $table->longtext("change_type")->nullable();
+            $table->string("change_type")->nullable();
             $table->longtext("covered_recipient_type")->nullable();
             $table->longtext("teaching_hospital_ccn")->nullable();
             $table->longtext("teaching_hospital_id")->nullable();
             $table->longtext("teaching_hospital_name")->nullable();
-            $table->longtext("physician_profile_id")->nullable();
-            $table->longtext("physician_first_name")->nullable();
-            $table->longtext("physician_middle_name")->nullable();
-            $table->longtext("physician_last_name")->nullable();
+            $table->integer("physician_profile_id");
+            $table->string("physician_first_name");
+            $table->string("physician_middle_name")->nullable();
+            $table->string("physician_last_name");
             $table->longtext("physician_name_suffix")->nullable();
             $table->longtext("recipient_primary_business_street_address_line1")->nullable();
             $table->longtext("recipient_primary_business_street_address_line2")->nullable();
-            $table->longtext("recipient_city")->nullable();
-            $table->longtext("recipient_state")->nullable();
+            $table->string("recipient_city");
+            $table->string("recipient_state");
             $table->longtext("recipient_zip_code")->nullable();
             $table->longtext("recipient_country")->nullable();
             $table->longtext("recipient_province")->nullable();
@@ -40,13 +40,13 @@ class GeneralPaymentDataTable extends Migration
             $table->longtext("physician_license_state_code3")->nullable();
             $table->longtext("physician_license_state_code4")->nullable();
             $table->longtext("physician_license_state_code5")->nullable();
-            $table->longtext("submitting_applicable_manufacturer_or_applicable_gpo_name")->nullable();
+            $table->string("submitting_applicable_manufacturer_or_applicable_gpo_name");
             $table->longtext("applicable_manufacturer_or_applicable_gpo_making_payment_id")->nullable();
             $table->longtext("applicable_manufacturer_or_applicable_gpo_making_payment_name")->nullable();
             $table->longtext("applicable_manufacturer_or_applicable_gpo_making_payment_state")->nullable();
             $table->longtext("applicable_manufacturer_or_applicable_gpo_making_payment_country")->nullable();
-            $table->decimal("total_amount_of_payment_usdollars",10,2)->nullable(); // number data type: https://dev.socrata.com/docs/datatypes/number.html#2.1
-            $table->datetime("date_of_payment",0)->nullable(); // floating timestamp data type : https://dev.socrata.com/docs/datatypes/floatingtimestamp.html#2.1
+            $table->decimal("total_amount_of_payment_usdollars",10,2); // number data type: https://dev.socrata.com/docs/datatypes/number.html#2.1
+            $table->datetime("date_of_payment",0); // floating timestamp data type : https://dev.socrata.com/docs/datatypes/floatingtimestamp.html#2.1
             $table->decimal("number_of_payments_included_in_total_amount",8,2)->nullable(); // number data type: https://dev.socrata.com/docs/datatypes/number.html#2.1
             $table->longtext("form_of_payment_or_transfer_of_value")->nullable();
             $table->longtext("nature_of_payment_or_transfer_of_value")->nullable();
@@ -60,7 +60,7 @@ class GeneralPaymentDataTable extends Migration
             $table->longtext("third_party_equals_covered_recipient_indicator")->nullable();
             $table->longtext("contextual_information")->nullable();
             $table->longtext("delay_in_publication_indicator")->nullable();
-            $table->longtext("record_id")->nullable();
+            $table->integer("record_id");
             $table->longtext("dispute_status_for_publication")->nullable();
             $table->longtext("related_product_indicator")->nullable();
             $table->longtext("covered_or_noncovered_indicator_1")->nullable();
@@ -91,6 +91,13 @@ class GeneralPaymentDataTable extends Migration
             $table->integer("program_year")->nullable(); // number data type, but assuming year will be integer
             $table->datetime("payment_publication_date",0)->nullable(); // floating timestamp data type : https://dev.socrata.com/docs/datatypes/floatingtimestamp.html#2.1
             $table->timestamps();
+            // $table->index('physician_first_name');
+            // $table->index('physician_last_name');
+            // $table->index('date_of_payment');
+            // $table->index('total_amount_of_payment_usdollars');
+            // $table->index('recipient_city');
+            // $table->index('record_id');
+            // $table->index('recipient_state');
         });
     }
 

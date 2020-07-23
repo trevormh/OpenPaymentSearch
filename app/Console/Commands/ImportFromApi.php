@@ -5,25 +5,31 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\GeneralPaymentData;
 
+/**
+ * This class is used to import data from the Open Payments data API.
+ */
 class ImportFromApi extends Command
 {
-    use \App\Traits\RetrieveDataTrait;
+    use \App\Traits\ApiDataTrait;
     use \App\Traits\SaveImportDataTrait;
+
+    private $dataSourceId = null;
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'import:fromapi {dataSourceId}';
+    protected $signature = 'import:fromapi {--dataSourceId=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Performs initial loading of the DB';
+    protected $description = 'Fetches data from the API';
 
     /**
      * Create a new command instance.
@@ -39,45 +45,69 @@ class ImportFromApi extends Command
      * Creates a MySQL database named open_payments_search
      *
      * @return int
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        // first check if there's any data in the general_payment_data table before proceeding
-        // determine if search should be displayed
-        $paymentCount = DB::table('general_payment_data')
-            ->count();
-        
-        if ($paymentCount == 0) {
-            $this->startApiImport();
+        $this->info('ImportFromApi handle');
+
+        // the datasourceID corresponds to a General Payment dataset
+        // the dataSourceId is db record containing the URL to be called in data_sources table
+        if (!empty($this->options()['dataSourceId'])) {
+            $dataSourceId = $this->options()['dataSourceId'];
         } else {
-            $this->info('Database already contains records. Please truncate general_payment_data and import_history tables to continue');
+            $dataSourceId = env('DEFAULT_DATASOURCE_ID');
         }
+
+        $this->verifyImportHistory($dataSourceId); // verify partial imports and set a new import_history record if necessary
+        $this->startApiImport($dataSourceId);
+        return;
     }
 
 
-    private function startApiImport() 
+    /**
+     * After all setup work is complete this method will continually make API calls until an empty data set is returned
+     * 
+     * @param integer $file
+     * @return void
+     */
+    private function startApiImport(int $dataSourceId) : void
     {
-        $dataSourceId = $this->argument('dataSourceId');
-        $this->info('Initial import of data_sources.id ' . $dataSourceId  . ' starting at: ' . Carbon::now());
+        $this->info('Starting import of data_sources.id ' . $dataSourceId  . ' starting at: ' . Carbon::now());
         
-        // for ($i=0; $i < 3; $i++) {
-        $i=0;
-        while (true) {
-
-            $importParams = $this->getImportParams($dataSourceId);
-            $this->info($i . ' retrieving offset ' . $importParams['offset'] . ' with limit of ' . $importParams['limit']);
+        $i=1; // counter for tracking # of API calls and iterations performed
+        while (true) { // fetch until there is no more data returned by the api
 
             $data = $this->retrieveData($dataSourceId);
+            $importParams = $this->getImportParams($dataSourceId);
+            // still more data to save...
             if (!empty($data)) {
-                $this->saveImportedData($dataSourceId,$data);
+                if (!isset($data['error'])) {
+                    $transformedData = $this->initiateTransform($data);
+                    $this->savePaymentData($transformedData);
+                    $this->saveImportHistory($importParams);
+                } else {
+                    $this->info('Error importing from API ' . print_r($data,true));
+                    break;
+                }
+            } elseif (empty($data)) {
+                $this->info('No new records found');
+                break;
             } else {
+                // the last iteration likely doesn't have a full set up to the limit
+                // fetch the import params again with the size of the data array to get the correct offset
+                if (count($data) !== $importParams['limit']) {
+                    $importParams = $this->getImportParams($dataSourceId, count($data));
+                }
+                $this->saveImportHistory($importParams);
                 $this->info('All records have been retrieved');
                 break;
             }
-            // sleep(5);
+            $this->info($i . ' retrieved offset ' . $importParams['offset'] . ' with limit of ' . $importParams['limit']);
             $i++;
         }
-
         $this->info('Finished import at ' . Carbon::now());
+        return;
     }
+
 }

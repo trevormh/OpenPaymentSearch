@@ -31,6 +31,9 @@
             // Set the Options for "Bloodhound" suggestion engine
             var engine = new Bloodhound({
                 remote: {
+                    // url: '/typeaheadSearch?field=' + searchField + '&q=%QUERY%',
+                    // url: '/typeaheadSearch?q=%QUERY%',
+                    // wildcard: '%QUERY%'
                     url: '/typeaheadSearch',
                     prepare : function(query, settings) {
                         settings.url += '?q=' + query;
@@ -50,6 +53,8 @@
             }, {
                 source: engine.ttAdapter(),
                 display: searchField, 
+
+
                 templates: {
                     
                     header: [

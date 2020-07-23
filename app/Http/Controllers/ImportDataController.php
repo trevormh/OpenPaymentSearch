@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\DataSource;
 
+
 class ImportDataController extends Controller
 {
-    use \App\Traits\RetrieveDataTrait;
+    use \App\Traits\ApiDataTrait;
     use \App\Traits\SaveImportDataTrait;
 
     /**
@@ -35,23 +36,4 @@ class ImportDataController extends Controller
             'imports' => $imports
         ]);
     }
-
-    
-    /*
-    * Endpoint to import data
-    */
-    public function import(Request $request, $dataSourceId)
-    {
-        $request->merge(['id' => $dataSourceId]);
-        $validator = Validator::make($request->all(),[
-            'id' => 'integer|exists:data_sources,id'
-        ]);
-
-        $data = $this->retrieveData($dataSourceId);
-
-        $this->saveImportedData($dataSourceId,$data);
-
-        return redirect('/import');
-    }
-
 }

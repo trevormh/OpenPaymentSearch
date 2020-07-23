@@ -18,9 +18,11 @@ use Illuminate\Support\Facades\Route;
 // main search/landing page
 Route::get('/', 'SearchController@index'); // home page for search functionality
 
-Route::get('/search', 'SearchController@search'); // typeahead search endpoint
+Route::get('/typeaheadSearch', 'SearchController@typeaheadSearch'); // typeahead search endpoint
 
 Route::post('/search/export', 'SearchController@export'); // typeahead search endpoint
+
+Route::get('/search/view/{generalPaymentDataId}', 'SearchController@view'); // typeahead search endpoint
 
 Route::get('/import', 'ImportDataController@index');
 
