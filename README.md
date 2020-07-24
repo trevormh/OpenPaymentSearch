@@ -11,15 +11,16 @@ ___
 
 Note: This was tested with the php.ini memory_limit set to 1024M. Although Laravel specifies a minimum PHP versioun of 7.2.5, PHP version 7.4.8 was used to create this application. Development was done on MacOS and has not been tested with Windows or Linux.
 ___
-## Installation
+
+# Installation and Use
 Clone the repository and cd into the root directory to perform the following:
 
 1. Copy the .env file to the project root directory.
 
-2. Create the open_payments_search database  
+2. Create the open_payments_search database (SQL also located in /sql/create_db.sql)  
 `php artisan CreateDb:OpenPaymentSearch`
 
-3. Run the migration to create the data_sources, import_history and general_payment_data tables  
+3. Run the migration to create the database tables   
 `php artisan migrate`
 
 4. Seed the data_sources table  
@@ -28,18 +29,25 @@ Clone the repository and cd into the root directory to perform the following:
 5. Install the comoser dependencies  
 `composer install` 
 
+6. Start the laravel server:  
+`php artisan serve`
+
+7. Proceed to Initial Data Import section below. The 1st option is the fastest and recommended for importing the dataset
+
+Note: To ensure fast searching it's very important that after data has been imported for the first time that the DB is indexed with the `php artisan UpdateDb:AddIndexes` command. You can run this command immediately after the database has been created (step 2 of this section), but indexing will likely slow down the initial import.
+
 ___
 
-# Initial Data Import
+# Initial Dataset Import
 
 There are several was to import the data set
 1. Import csv with MySQL INFILE command (fastest)
 2. Import csv with Laravel Artisan command
 3. Import from Laravel command to make API requests
 
-Because it is large file a local import of the CSV  (#1 and #2) is suggested over API calls.
+A local import of the CSV (#1 and #2) is suggested over API calls for the initial dataset import. API calls are intended for fetching additional data after the dataset has been loaded.
 
-## **Import Option 1 - Importing csv with MySQL Infile command (Fastest)**
+## **Import Option 1 - Importing csv with MySQL Infile command (fastest)**
 
 First download the CSV. To download the dataset please vist [this link](https://dev.socrata.com/foundry/openpaymentsdata.cms.gov/p2ve-2ws5) and on the right side in the "Download & Export" section click on the "Export dataset as CSV" link.
 
@@ -61,20 +69,26 @@ Finally, enter the following command to indicate to the app that data has been l
 
 ## **Import Option 2 - Importing csv with Laravel Artisan command**
 
-First download the CSV. To download the dataset please vist [this link](https://dev.socrata.com/foundry/openpaymentsdata.cms.gov/p2ve-2ws5) and on the right side in the "Download & Export" section click on the "Export dataset as CSV" link.
+First download the CSV. To download the dataset please vist [this link](https://dev.socrata.com/foundry/openpaymentsdata.cms.gov/p2ve-2ws5) and on the right side in the "Download & Export" section click on the "Export dataset as CSV" link. The application checks the storage/import_data directory for the csv with the default filename of 'General_Payment_Data___Detailed_Dataset_2019_Reporting_Year.csv', but you can specify a filepath too.
 
-**Note: If you would like to import without specifying a filepath it must be located in the 'storage/import_data' directory and named 'General_Payment_Data___Detailed_Dataset_2019_Reporting_Year.csv'**
-
-To import csv by specifying a filepath:  
+To import the csv by specifying a filepath:  
 `php artisan Import:FromFile --filepath='/path/to/file.csv'`
 
-To import from the default location (storage/import_data/):  
+To import the csv from the default location (storage/import_data):  
 `php artisan Import:FromFile`
+
+Finally, add the DB indexes with the following command. This may take a few minutes:  
+`php artisan UpdateDb:AddIndexes`
 
 ## **Import Option 3 - Importing with API calls** 
 
-This method is only recommended to fetch additional data once an initial import has been completed due to the speed of it and rate limiting of the API. To use this option enter the followin command:  
+This method is only recommended to fetch additional data once an initial import has been completed due to the speed of it and rate limiting of the API. 
+
+To use this option enter the following command:  
 `php artisan Import:FromApi`
+
+Finally, add the DB indexes with the following command. This may take a few minutes:  
+`php artisan UpdateDb:AddIndexes`
 
 ___
 # Fetching New Data
