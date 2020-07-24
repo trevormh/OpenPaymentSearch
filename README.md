@@ -57,11 +57,11 @@ Next open the MySQL command line in your terminal and connect to the database th
 Copy and paste the following command to enable INFILE command loading:  
 `SET GLOBAL local_infile=1;`
 
-Next, open the file 'initial_data_import.sql' located in the sql_scripts directory of this repository. Update the filepath to where your csv was downloaded. Copy/paste the command into your MySQL terminal to import the dataset. This may take 20+ minutes.
+Next, open the file located at 'sql_files/initial_data_import.sql'. Copy/paste to a text editor and change the filepath to where your csv is downloaded. Copy/paste the command into your MySQL terminal to import the dataset. This may take 20+ minutes.
 
 **IMPORTANT - loading of the dataset must be completed before continuing to the next steps**
 
-In your terminal navigate root directory of this repository and enter the following command to add indexes to the database. This may take a few minutes:  
+Navigate back to the project root directory and enter the following command to add indexes to the database. This may take a few minutes:  
 `php artisan UpdateDb:AddIndexes`
 
 Finally, enter the following command to indicate to the app that data has been loaded:  
