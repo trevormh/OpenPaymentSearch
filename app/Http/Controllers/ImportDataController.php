@@ -51,8 +51,8 @@ class ImportDataController extends Controller
             'id' => 'required|exists:data_sources,id'
         ]);
         if ($validator->fails()) {
-            return redirect('/')
-                ->withErrors(['error', $validator->errors()]);;
+            Session::flash('message', $validator->errors()->first()); 
+            return redirect('/import');
         }
 
         Session::flash('message', "Because API requests and processing may take a while, in a production environment this button would trigger a scheduled worker such as RabbitMQ to process the updates in the background. To fetch updates please use the 'php artisan Import:FromApi' command from your terminal. This comand would be called by the background worker."); 
@@ -73,8 +73,8 @@ class ImportDataController extends Controller
             'id' => 'required|exists:data_sources,id'
         ]);
         if ($validator->fails()) {
-            return redirect('/')
-                ->withErrors(['error', $validator->errors()]);;
+            Session::flash('message', $validator->errors()->first()); 
+            return redirect('/import');
         }
 
         $dataSource = DataSource::where('id', $dataSourceId)
@@ -100,8 +100,8 @@ class ImportDataController extends Controller
             'url' => 'required'
         ]);
         if ($validator->fails()) {
-            return redirect('/')
-                ->withErrors(['error', $validator->errors()]);;
+            Session::flash('message', $validator->errors()->first()); 
+            return redirect('/import');
         }
 
         $dataSource = DataSource::where('id', $dataSourceId)

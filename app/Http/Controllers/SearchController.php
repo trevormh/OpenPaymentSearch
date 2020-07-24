@@ -60,10 +60,8 @@ class SearchController extends Controller
             'query' => 'required'
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 'failure',
-                'message' => 'param q must be provided'
-            ]);
+            Session::flash('message', $validator->errors()->first()); 
+            return redirect('/import');
         }
         $payments = GeneralPaymentData::where('physician_first_name', 'LIKE', $query. '%')
             ->orWhere('physician_last_name', 'LIKE', $query. '%')
@@ -92,8 +90,8 @@ class SearchController extends Controller
             'request_params' => 'required'
         ]);
         if ($validator->fails()) {
-            return redirect('/')
-                ->withErrors(['error', $validator->errors()]);;
+            Session::flash('message', $validator->errors()->first()); 
+            return redirect('/');
         }
 
         $params = json_decode($request->get('request_params'));
@@ -127,8 +125,8 @@ class SearchController extends Controller
             'gpd_id' => 'required|exists:general_payment_data,id'
         ]);
         if ($validator->fails()) {
-            return redirect('/')
-                ->withErrors(['error', $validator->errors()]);;
+            Session::flash('message', $validator->errors()->first()); 
+            return redirect('/import');
         }
 
         $payment = GeneralPaymentData::where('id', $generalPaymentDataId)
