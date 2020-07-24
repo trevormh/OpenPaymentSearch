@@ -17,17 +17,17 @@ Clone the repository and cd into the root directory to perform the following:
 
 1. Copy the .env file to the project root directory.
 
-2. Create the open_payments_search database (SQL also located in /sql/create_db.sql)  
+2. Install the comoser dependencies  
+`composer install` 
+
+3. Create the open_payments_search database (SQL also located in /sql/create_db.sql)  
 `php artisan CreateDb:OpenPaymentSearch`
 
-3. Run the migration to create the database tables   
+4. Run the migration to create the database tables   
 `php artisan migrate`
 
-4. Seed the data_sources table  
+5. Seed the data_sources table  
 `php artisan db:seed --class=DataSourcesSeeder`
-
-5. Install the comoser dependencies  
-`composer install` 
 
 6. Start the laravel server:  
 `php artisan serve`
