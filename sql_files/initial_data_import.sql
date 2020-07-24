@@ -1,4 +1,4 @@
-LOAD DATA LOCAL INFILE '/Users/Trevor/software_dev/vagrant/OpenPaymentsSearch/storage/import_data/General_Payment_Data___Detailed_Dataset_2019_Reporting_Year.csv'
+LOAD DATA LOCAL INFILE '/path/to/dataset.csv'
 INTO TABLE general_payment_data
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
