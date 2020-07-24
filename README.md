@@ -17,7 +17,7 @@ Clone the repository and cd into the root directory to perform the following:
 
 1. Copy the .env file to the project root directory.
 
-2. Install the comoser dependencies  
+2. Install the composer dependencies  
 `composer install` 
 
 3. Create the open_payments_search database (SQL also located in /sql/create_db.sql)  
@@ -34,14 +34,14 @@ Clone the repository and cd into the root directory to perform the following:
 
 7. Proceed to Initial Data Import section below. The 1st option is the fastest and recommended for importing the dataset
 
-Note: To ensure fast searching it's very important that after data has been imported for the first time that the DB is indexed with the `php artisan UpdateDb:AddIndexes` command. You can run this command immediately after the database has been created (step 2 of this section), but indexing will likely slow down the initial import.
+Note: To ensure fast searching it's important that the DB is indexed with the `php artisan UpdateDb:AddIndexes` command. It is recommended to run this command after the initial dataset import because indexing will likely slow down the import, but you can run it prior to the import if you choose.
 
 ___
 
 # Initial Dataset Import
 
 There are several was to import the data set
-1. Import csv with MySQL INFILE command (fastest)
+1. Import csv with MySQL INFILE command (recommended)
 2. Import csv with Laravel Artisan command
 3. Import from Laravel command to make API requests
 
@@ -82,7 +82,7 @@ Finally, add the DB indexes with the following command. This may take a few minu
 
 ## **Import Option 3 - Importing with API calls** 
 
-This method is only recommended to fetch additional data once an initial import has been completed due to the speed of it and rate limiting of the API. 
+This method is only recommended to fetch additional data once an initial import has been completed due to the speed of it and rate limiting of the API, however it can be used to import the entire dataset.
 
 To use this option enter the following command:  
 `php artisan Import:FromApi`
@@ -96,4 +96,4 @@ ___
 To fetch new data run the following command from the root directory:  
 `php artisan Import:FromApi`
 
-Because the process may be time consuming, in a production environment this would be set up as a Laravel Scheduled job triggered by a cron or called by another queue/worker service such as RabbitMQ.
+Because the process may be time consuming, in a production environment if a user wishes to manually check for updates this command could be called by a Laravel Scheduled job or by another queue/worker service such as RabbitMQ.
