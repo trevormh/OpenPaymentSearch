@@ -96,14 +96,13 @@ class ImportDataController extends Controller
         $request->merge(['id' => $dataSourceId]);
         $validator = Validator::make($request->all(),[
             'id' => 'required|exists:data_sources,id',
-            'name' => 'required:min',
+            'name' => 'required',
             'url' => 'required'
         ]);
         if ($validator->fails()) {
             Session::flash('message', $validator->errors()->first()); 
             return redirect('/import');
         }
-
         $dataSource = DataSource::where('id', $dataSourceId)
             ->first()
             ->update($request->all());

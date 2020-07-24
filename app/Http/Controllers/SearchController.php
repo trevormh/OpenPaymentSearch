@@ -25,7 +25,6 @@ class SearchController extends Controller
         if ($request->has('field') && $request->has('q')) {
             $field = $request->get('field');
             $search = $request->get('q');
-            // $results = GeneralPaymentData::where($field, 'LIKE', '%'. $search. '%')
             $results = GeneralPaymentData::where($field, $search)
                 ->orderBy('id','desc')
                 ->paginate(20);
@@ -99,7 +98,7 @@ class SearchController extends Controller
     }
 
     /**
-     * 
+     * generator to assist with exporting to excel
      */
     private function exportGenerator($params) : \Generator
     {
