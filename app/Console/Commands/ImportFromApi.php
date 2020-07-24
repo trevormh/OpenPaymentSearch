@@ -78,7 +78,7 @@ class ImportFromApi extends Command
         $i=1; // counter for tracking # of API calls and iterations performed
         while (true) { // fetch until there is no more data returned by the api
 
-            $data = $this->retrieveData($dataSourceId);
+            $data = $this->retrieveData($dataSourceId); // method in ApiDataTrait
             $importParams = $this->getImportParams($dataSourceId);
             // still more data to save...
             if (!empty($data)) {
@@ -91,8 +91,8 @@ class ImportFromApi extends Command
                     break;
                 }
             } elseif (empty($data)) {
-                $this->info('No new records found');
-                break;
+                $this->info('No new records found to be imported');
+                return;
             } else {
                 // the last iteration likely doesn't have a full set up to the limit
                 // fetch the import params again with the size of the data array to get the correct offset

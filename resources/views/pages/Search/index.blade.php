@@ -4,6 +4,7 @@
         @include('pages.search.typeahead')
 
         <div>
+           
             @if (count($results) > 0)
                 <h2 class="text-center">Search Results</h2>
                 <form method="POST" type="submit" action="/search/export" download="export.xls">

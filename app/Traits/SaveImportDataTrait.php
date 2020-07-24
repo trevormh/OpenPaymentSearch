@@ -48,32 +48,31 @@ trait SaveImportDataTrait
             ->first();
 
         // if there are payment records found but no import history, create a new import history record
+        // this will be encountered from the initial import
         if ($paymentCount > 0 && empty($importHistory)) {
             $this->info('Import history mistmatch, creating record in import_history table');
             $this->saveImportHistory([
-                'limit' => 0,
-                'offset' =>  $paymentCount // will be the new starting point
+                'limit' => $paymentCount - 1, // records start at 0, subtract 1 from count
+                'offset' => 0
             ]);
             return;
         }  
 
         // there are payments available, check that the import params match the count in the general_payments table
         if (!empty($importHistory)) {
-            $importParams = $this->getImportParams($dataSourceId);
+            $importParams = $this->getImportParams($dataSourceId); // located in 
 
             // If the offset and payment count match, and there's no limit set on the last import_history record the import is verified
-            if (($importParams['offset'] - 1) == $paymentCount && $importHistory->limit == 0) {
+            if (($importParams['offset']) == $paymentCount) {
                 $this->info('Import history verified');
                 return;
-            }
-
-            // If the offset doesn't match the count insert a new record into import_history
-            // Offset is the new starting point, subtract 1 to determine last ending record
-            if (($importParams['offset'] - 1) !== $paymentCount) {
+            } else {
+                 // If the offset doesn't match the count insert a new record into import_history
+                 // this is essentially a "dummy" record for the next starting point to figure out the offset
                 $this->info('Import history mistmatch, creating record in import_history table');
                 $this->saveImportHistory([
                     'limit' => 0,
-                    'offset' => $paymentCount
+                    'offset' => $paymentCount - 1  // records start at 0, subtract 1 from count
                 ]);
                 return;
             }

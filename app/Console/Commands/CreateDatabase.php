@@ -47,7 +47,6 @@ class CreateDatabase extends Command
             
             $query = "CREATE DATABASE IF NOT EXISTS $dbName CHARACTER SET $charset COLLATE $collation;";
             DB::statement($query);
-            config(["database.connections.mysql.database" => $dbName]);
 
             $this->info('Database ' . $dbName . ' created successfully');
         } catch (\Exception $e) {

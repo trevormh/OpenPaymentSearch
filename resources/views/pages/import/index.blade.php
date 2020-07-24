@@ -9,19 +9,28 @@
             <h2 class="text-center">Data sources</h2>
             <table class="table">
                 <thead>
+                    <th>ID</th>
                     <th>Name</th>
                     <th>URL</th>
                     <th></th>
+                    
                 </thead>
                 <tbody>
                 @foreach($dataSources as $data)
                 <tr>
+                    <td>{{ $data->id }}</td>
                     <td>{{$data->name}}</td>
                     <td>{{$data->url}}</td>
                     <td>
-                        <form method="POST" action="/import/{{ $data->id }}">
+                        <form method="GET" action="/import/edit/{{ $data->id }}">
                         @csrf
-                        <button>Update</submit>
+                        <button>Edit</submit>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="POST" action="/import/{{ $data->id }}">
+                            @csrf
+                            <button>Fetch Updates</submit>
                         </form>
                     </td>
                 </tr>

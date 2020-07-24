@@ -92,14 +92,19 @@ class SearchController extends Controller
             'request_params' => 'required'
         ]);
         if ($validator->fails()) {
-            return redirect('/');
+            return redirect('/')
+                ->withErrors(['error', $validator->errors()]);;
         }
 
         $params = json_decode($request->get('request_params'));
         return (new FastExcel($this->exportGenerator($params)))->download('export.xlsx');
     }
 
-    private function exportGenerator($params) {
+    /**
+     * 
+     */
+    private function exportGenerator($params) : \Generator
+    {
         $payments = GeneralPaymentData::where($params->field, $params->q)
                 ->orderBy('id','desc')
                 ->cursor();
@@ -122,7 +127,8 @@ class SearchController extends Controller
             'gpd_id' => 'required|exists:general_payment_data,id'
         ]);
         if ($validator->fails()) {
-            return redirect('/');
+            return redirect('/')
+                ->withErrors(['error', $validator->errors()]);;
         }
 
         $payment = GeneralPaymentData::where('id', $generalPaymentDataId)

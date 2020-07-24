@@ -9,7 +9,7 @@ class ImportHistory extends Model
 {
     public $table = 'import_history';
 
-    protected $fillable = ['id', 'data_sources_id', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'data_sources_id', 'created_at', 'updated_at', 'limit', 'offset'];
 
     public $timestamps = true;
 

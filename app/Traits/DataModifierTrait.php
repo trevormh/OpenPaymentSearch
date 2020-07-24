@@ -7,6 +7,7 @@ use League\Fractal\Resource\Collection;
 use League\Fractal;
 use App\Transformers\ImportDataTransformer;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Trait to facilitate misc. data manipulation
@@ -44,9 +45,11 @@ trait DataModiferTrait
 
         if (empty($importHistory)) {
             $offset = 0;
-        // the results returned didn't reach the limit
+        // arrSize is passed in from an API request when the results didn't reach the limit
+        // this would occurr when the offset + limit exceeds the size of the dataset
         } elseif ($arrSize !== null) {
             $offset = $importHistory->offset + $arrSize + 1;
+        // records are found
         } else {
             $offset = $importHistory->offset + $importHistory->limit + 1;
         }
@@ -61,6 +64,7 @@ trait DataModiferTrait
 
     protected function mapQueryToField($query, $payments)
     {
+        // indexed fields of general_payment_data table for fast searching
         $indexedFields = [
             'physician_first_name',
             'physician_last_name',
@@ -68,7 +72,6 @@ trait DataModiferTrait
             'recipient_state',
             'recipient_city'
         ];
-
 
         $fields = [];
         // loop through each row and find which field is the closest match

@@ -76,7 +76,7 @@ class ImportFromFile extends Command
             if (empty($batch)) {
                 $this->info('Batch was empty at batch number ' . $i);
             }
-            $this->savePaymentData($batch); // located in SaveImportDataTrait         
+            $this->savePaymentData($batch); // located in SaveImportDataTrait
             $this->info("Imported batch number " . $i);
             $i++;
         } 
@@ -89,7 +89,7 @@ class ImportFromFile extends Command
 
         $count = GeneralPaymentData::count();
         $this->saveImportHistory([
-            'limit' => $count,
+            'limit' => $count - 1, // records start at 0, subtract one
             'offset' => 0
         ]);
         $this->info('All data imported');
@@ -123,10 +123,10 @@ class ImportFromFile extends Command
 
             // first iteration, get CSV field names
             if ($firstLine == true ) { 
-                print_r($line);die();
+                $index = array_search("Name_of_Third_Party_Entity_Receiving_Payment_or_Transfer_of_Value",$line);
                 // the field contains 65 characters, shorten to 64 to be stored by MySQL
-                $line[43] = "name_of_third_party_entity_receiving_payment_or_transfer_of_valu"; 
-                $fieldNames = $line;
+                $line[$index] = "name_of_third_party_entity_receiving_payment_or_transfer_of_valu"; 
+                $this->fieldNames = $line;
                 $firstLine = false;
                 continue;
             }
@@ -135,7 +135,8 @@ class ImportFromFile extends Command
             if (count ($finalBatch) > 0) {
                 $finalBatch = [];
             }
-            $data = array_change_key_case(array_combine($fieldNames, $line));
+            // change all keys to lowercase
+            $data = array_change_key_case(array_combine($this->fieldNames, $line));
 
             // still lines to be added to the batch array...
             if ($linesBatched < $batchSize) {
