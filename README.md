@@ -1,5 +1,5 @@
 # Open Payments Search
-This Laravel app is used to import and through the 2019 Open Paments dataset located here 
+This Laravel app is used to import and search through the 2019 Open Paments dataset located here 
 https://openpaymentsdata.cms.gov/dataset/General-Payment-Data-Detailed-Dataset-2019-Reporti/p2ve-2ws5
 
 ___
@@ -9,7 +9,7 @@ ___
 - MySQL (tested with V8.0.21)
 - Composer
 
-Note: This was tested with the php.ini memory_limit set to 1024M. Although Laravel specifies a minimum PHP versioun of 7.2.5, PHP version 7.4.8 was used to create this application. Development was done on MacOS and has not been tested with Windows or Linux.
+Note: This was tested with the php.ini memory_limit set to 1024M. Although Laravel specifies a minimum PHP version of 7.2.5, PHP version 7.4.8 was used to create this application. Development was done on MacOS and has not been tested with Windows or Linux.
 ___
 
 # Installation and Use
